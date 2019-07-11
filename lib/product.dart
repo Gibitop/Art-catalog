@@ -23,7 +23,8 @@ class Product extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Center(
-            child: FutureBuilder(
+            child: Container(
+              child: FutureBuilder(
                 future: image,
                 builder: (context, snapshot) {
                   return snapshot.data != null
@@ -35,12 +36,38 @@ class Product extends StatelessWidget {
                           ),
                           padding: EdgeInsets.all(8),
                         );
-                }),
+                },
+              ),
+              constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width,
+                  maxHeight: MediaQuery.of(context).size.width),
+              margin: EdgeInsets.all(10),
+            ),
           ),
-          Text(artwork.name),
-          Text(artwork.price),
-          Text(artwork.size),
-          Text(artwork.technique),
+          // Spacer(),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  artwork.name,
+                  style: Theme.of(context).textTheme.headline,
+                ),
+                Text(
+                  artwork.price,
+                  style: Theme.of(context).textTheme.title,
+                ),
+                Text(
+                  'Size: ${artwork.size}',
+                  style: Theme.of(context).textTheme.subtitle,
+                ),
+                Text(
+                  'Technique: ${artwork.technique}',
+                  style: Theme.of(context).textTheme.subtitle,
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
