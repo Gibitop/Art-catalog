@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 class Login extends StatelessWidget {
   final String title;
@@ -27,31 +28,55 @@ class Login extends StatelessWidget {
           title: Text(title),
           automaticallyImplyLeading: !mustLogin,
         ),
-        body: Column(
-          children: <Widget>[
-            Text(
-              'Login',
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontSize: 40,
+        body: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Login',
+                style: Theme.of(context).textTheme.display1,
               ),
-            ),
-            Text(
-                'Your artchive ID is a 5 digit number that you can obtain form your artchive page URL.\nFor example, for "artchive.ru/artists/83618~Ol\'ga_Dejkova" the ID is 83618'),
-            Builder(
-              builder: (context) => TextField(
-                onChanged: (id) {
-                  newID = id;
-                },
-                onSubmitted: (text) => _onSubmit(newID, context),
+              SizedBox(height: 10),
+              Text(
+                'Your artchive ID is a number that you can obtain form your artchive page URL. For example, for URL',
+                style: Theme.of(context).textTheme.body1,
+                textAlign: TextAlign.left,
               ),
-            ),
-            Builder(
-                builder: (context) => FlatButton(
-                      onPressed: () => _onSubmit(newID, context),
-                      child: Text('Submit'),
-                    ))
-          ],
+              Text('artchive.ru/artists/83618~Ol\'ga_Dejkova',
+                  style: Theme.of(context).textTheme.body2,
+                  textAlign: TextAlign.left),
+              Text('the ID is 83618',
+                  style: Theme.of(context).textTheme.body1,
+                  textAlign: TextAlign.left),
+              Builder(
+                builder: (context) => TextField(
+                  autofocus: true,
+                  autocorrect: false,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.account_circle),
+                      labelText: 'Artchive ID'),
+                  onChanged: (id) {
+                    newID = id;
+                  },
+                  onSubmitted: (text) => _onSubmit(newID, context),
+                ),
+              ),
+              Center(
+                child: Container(
+                  width: 200,
+                  padding: EdgeInsets.all(10),
+                  child: Builder(
+                      builder: (context) => FlatButton(
+                            onPressed: () => _onSubmit(newID, context),
+                            child: Text('Submit'),
+                            textTheme: ButtonTextTheme.primary,
+                            color: Theme.of(context).accentColor,
+                          )),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
