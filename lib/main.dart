@@ -1,5 +1,6 @@
 // Dart
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:html/parser.dart';
 import 'package:html/dom.dart' as DOM;
@@ -13,8 +14,8 @@ import 'package:flutter/rendering.dart';
 
 // Screens
 import 'login.dart';
-import 'help.dart';
 import 'product.dart';
+import 'help.dart';
 
 import 'artwork.dart';
 
@@ -23,6 +24,7 @@ void main() => runApp(Root());
 class Root extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
       title: 'Art catalog',
       theme: ThemeData(
@@ -46,7 +48,7 @@ class _CatalogState extends State<Catalog> {
   static const artworkFile = 'artworks.json';
   static const configFile = 'ID';
   static const imgDir = 'img';
-  static const imgSize = '200';
+  static const imgSize = '400';
 
   String id;
   Future<Directory> path;
@@ -336,58 +338,58 @@ class _CatalogState extends State<Catalog> {
             Expanded(
               child: Builder(
                 builder: (context) => RefreshIndicator(
-                      onRefresh: () {
-                        if (updateInProgress) {
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                            content: Text('An update is already in progress!'),
-                          ));
-                          return null;
-                        } else {
-                          return update();
-                        }
-                      },
-                      child: ListView.builder(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: dispalyingList.length,
-                        itemBuilder: (context, index) {
-                          final item = dispalyingList[index];
-                          return ListTile(
-                            title: Text(item.name),
-                            subtitle: Text(item.price),
-                            leading: Container(
-                              constraints: BoxConstraints(
-                                minWidth: 60,
-                                maxWidth: 60,
-                              ),
-                              child: FutureBuilder(
-                                  future: getImage(item.image),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<File> snapshot) {
-                                    return snapshot.data != null
-                                        ? Image.file(snapshot.data)
-                                        : Container(
-                                            child: Icon(
-                                              Icons.image,
-                                              size: 40,
-                                            ),
-                                            padding: EdgeInsets.all(8),
-                                          );
-                                  }),
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Product(
-                                            title: this.widget.title,
-                                            artwork: item,
-                                            image: getImage(item.image),
-                                          )));
-                            },
-                          );
+                  onRefresh: () {
+                    if (updateInProgress) {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('An update is already in progress!'),
+                      ));
+                      return Future.value();
+                    } else {
+                      return update();
+                    }
+                  },
+                  child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: dispalyingList.length,
+                    itemBuilder: (context, index) {
+                      final item = dispalyingList[index];
+                      return ListTile(
+                        title: Text(item.name),
+                        subtitle: Text(item.price),
+                        leading: Container(
+                          constraints: BoxConstraints(
+                            minWidth: 60,
+                            maxWidth: 60,
+                          ),
+                          child: FutureBuilder(
+                              future: getImage(item.image),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<File> snapshot) {
+                                return snapshot.data != null
+                                    ? Image.file(snapshot.data)
+                                    : Container(
+                                        child: Icon(
+                                          Icons.image,
+                                          size: 40,
+                                        ),
+                                        padding: EdgeInsets.all(8),
+                                      );
+                              }),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Product(
+                                        title: this.widget.title,
+                                        artwork: item,
+                                        image: getImage(item.image),
+                                      )));
                         },
-                      ),
-                    ),
+                      );
+                    },
+                  ),
+                ),
               ),
             )
           ],
