@@ -139,12 +139,12 @@ class _CatalogState extends State<Catalog> {
   Future<void> update() async {
     if (id.isEmpty) {
       getID();
-      return;
+      return Future.value();
     }
 
     if (updateInProgress) {
       print('Update is already in progress');
-      return;
+      return Future.value();
     }
     print('Scrapping started');
     updateInProgress = true;
