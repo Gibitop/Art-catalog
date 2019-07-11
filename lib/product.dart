@@ -1,29 +1,47 @@
-import 'package:art_catalog/scrapper.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+import 'artwork.dart';
 
 class Product extends StatelessWidget {
   final Artwork artwork;
   final String title;
-  Product({Key key, @required this.title, @required this.artwork})
+  final Future<File> image;
+  Product(
+      {Key key,
+      @required this.title,
+      @required this.artwork,
+      @required this.image})
       : super(key: key);
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        actions: <Widget>[
-          IconButton(
-            padding: EdgeInsets.all(0),
-            iconSize: 32,
-            icon: Icon(Icons.help),
-            onPressed: () {
-              print('SHOW "ABOUT" PAGE');
-            },
-          )
-        ],
       ),
       body: Column(
-        children: <Widget>[],
+        children: <Widget>[
+          Center(
+            child: FutureBuilder(
+                future: image,
+                builder: (context, snapshot) {
+                  return snapshot.data != null
+                      ? Image.file(snapshot.data)
+                      : Container(
+                          child: Icon(
+                            Icons.image,
+                            size: 40,
+                          ),
+                          padding: EdgeInsets.all(8),
+                        );
+                }),
+          ),
+          Text(artwork.name),
+          Text(artwork.price),
+          Text(artwork.size),
+          Text(artwork.technique),
+        ],
       ),
     );
   }

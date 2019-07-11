@@ -10,7 +10,9 @@ class Help extends StatelessWidget {
         title: Text(title),
       ),
       body: Column(
-        children: <Widget>[],
+        children: <Widget>[
+          Center(child: Text('Help page'))
+        ],
       ),
     );
   }
