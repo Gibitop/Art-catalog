@@ -6,6 +6,17 @@ class Login extends StatelessWidget {
   final bool mustLogin;
   Login({Key key, @required this.title, @required this.mustLogin})
       : super(key: key);
+
+  _onSubmit(newID, context) {
+    if (newID.isEmpty) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('You have to fill in you artchive ID'),
+      ));
+    } else {
+      Navigator.pop(context, newID);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String newID = '';
@@ -15,16 +26,6 @@ class Login extends StatelessWidget {
         appBar: AppBar(
           title: Text(title),
           automaticallyImplyLeading: !mustLogin,
-          actions: <Widget>[
-            IconButton(
-              padding: EdgeInsets.all(0),
-              iconSize: 32,
-              icon: Icon(Icons.help),
-              onPressed: () {
-                print('SHOW "ABOUT" PAGE');
-              },
-            )
-          ],
         ),
         body: Column(
           children: <Widget>[
@@ -37,24 +38,18 @@ class Login extends StatelessWidget {
             ),
             Text(
                 'Your artchive ID is a 5 digit number that you can obtain form your artchive page URL.\nFor example, for "artchive.ru/artists/83618~Ol\'ga_Dejkova" the ID is 83618'),
-            TextField(
-              onChanged: (id) {
-                newID = id;
-              },
+            Builder(
+              builder: (context) => TextField(
+                onChanged: (id) {
+                  newID = id;
+                },
+                onSubmitted: (text) => _onSubmit(newID, context),
+              ),
             ),
             Builder(
                 builder: (context) => FlatButton(
-                      onPressed: () {
-                        if (newID.isEmpty) {
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                            content:
-                                Text('You have to fill in you artchive ID'),
-                          ));
-                        } else {
-                          Navigator.pop(context, newID);
-                        }
-                      },
-                      child: Text('AAA'),
+                      onPressed: () => _onSubmit(newID, context),
+                      child: Text('Submit'),
                     ))
           ],
         ),

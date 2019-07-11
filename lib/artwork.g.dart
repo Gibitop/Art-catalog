@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'scrapper.dart';
+part of 'artwork.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
