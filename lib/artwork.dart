@@ -1,13 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'artwork.g.dart';
 
+const String dataNotAvaliable = 'Data not available';
+
 @JsonSerializable()
 class Artwork {
-  String name;
-  String size;
-  String price;
-  String image;
-  String technique;
+  String name = dataNotAvaliable;
+  String size = dataNotAvaliable;
+  String price = dataNotAvaliable;
+  String image = dataNotAvaliable;
+  String technique = dataNotAvaliable;
 
   Artwork();
 
