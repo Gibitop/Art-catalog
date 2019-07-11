@@ -320,7 +320,10 @@ class _CatalogState extends State<Catalog> {
             iconSize: 32,
             icon: Icon(Icons.help),
             onPressed: () {
-              print(dispalyingList);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Help(title: this.widget.title)));
             },
           )
         ],
