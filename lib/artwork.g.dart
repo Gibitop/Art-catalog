@@ -20,5 +20,5 @@ Map<String, dynamic> _$ArtworkToJson(Artwork instance) => <String, dynamic>{
       'size': instance.size,
       'price': instance.price,
       'image': instance.image,
-      'technique': instance.technique
+      'technique': instance.technique,
     };
