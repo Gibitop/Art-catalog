@@ -1,0 +1,14 @@
+General:
+    - About page
+    - Artwork page redesign
+    - ID page design
+    - Add help texts
+
+Bugs:
+    - No internet throws an exception
+    - Artwork page can go lower than the screen
+
+Features:
+    - Force update (restart the function)
+    - Take URLs instead of IDs
+    - If there was no internet connection, try reconnecting every minute in a background
