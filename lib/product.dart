@@ -46,8 +46,9 @@ class Product extends StatelessWidget {
           ),
           // Spacer(),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(15),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
                   artwork.name,
@@ -55,15 +56,25 @@ class Product extends StatelessWidget {
                 ),
                 Text(
                   artwork.price,
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.subhead,
                 ),
-                Text(
-                  'Size: ${artwork.size}',
-                  style: Theme.of(context).textTheme.subtitle,
-                ),
-                Text(
-                  'Technique: ${artwork.technique}',
-                  style: Theme.of(context).textTheme.subtitle,
+                Table(
+                  children: <TableRow>[
+                    TableRow(children: <Widget>[
+                      Text(
+                        'Size:',
+                        style: Theme.of(context).textTheme.title,
+                      ),
+                      Text(artwork.size)
+                    ]),
+                    TableRow(children: <Widget>[
+                      Text(
+                        'Technique:',
+                        style: Theme.of(context).textTheme.subtitle,
+                      ),
+                      Text(artwork.technique)
+                    ]),
+                  ],
                 ),
               ],
             ),
