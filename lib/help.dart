@@ -11,7 +11,12 @@ class Help extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          Center(child: Text('Help page'))
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(children: <Widget>[
+              Text('Art catalog is an app that helps artists keep track of their artworks. The app uses artchive.ru to cache data about your artworks, so you can access it anywhere you go'),
+            ]),
+          )
         ],
       ),
     );
