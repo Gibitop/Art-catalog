@@ -1,8 +1,8 @@
 General:
-    - About page
     - Artwork page redesign
+    - More fields for an artwork
     - ID page design
-    - Add help texts
+    - Get rid of a help page, move it's contents to ID page
 
 Bugs:
     - No internet throws an exception
@@ -12,3 +12,4 @@ Features:
     - Force update (restart the function)
     - Take URLs instead of IDs
     - If there was no internet connection, try reconnecting every minute in a background
+    - Get more data trough API
