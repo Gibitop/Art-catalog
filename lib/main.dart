@@ -153,52 +153,46 @@ class _CatalogState extends State<Catalog> {
 
     List<Artwork> out = [];
 
-    var baseURL = 'https://artchive.ru';
+    // API link
+    // https://artchive.ru/action/vue/works/search?all=2&p=1&artist=83618
     var client = Client();
-    Response response =
-        await client.get(baseURL + '/artists/' + id + '/works/all:2');
-    var document = parse(response.body);
+    var page = 1;
+    var parsed = 0;
+    var total = -1;
+    do {
+      Response response = await client.get(
+          'https://artchive.ru/action/vue/works/search?all=2&p=$page&artist=$id');
+      var data = json.decode(utf8.decode(response.bodyBytes));
 
-    // Get artwork info links
-    List<DOM.Element> linksElements = document.querySelectorAll('.c_span_link');
-    List<String> infoLinks = [];
-    for (var link in linksElements) {
-      if (link.attributes.containsKey('href')) {
-        infoLinks.add(baseURL + link.attributes['href']);
+      for (var work in data['works']) {
+        out.add(Artwork());
+        out.last.name = work['name'];
+        out.last.size = '${work['sx']}x${work['sy']}x${work['sz']}';
+        out.last.price = work['status']['price'];
+        switch (work['status']['currency']) {
+          case 'rur':
+            out.last.price += ' ₽';
+            break;
+          case 'usd':
+            out.last.price += ' \$';
+            break;
+          case 'euro':
+            out.last.price += ' €';
+            break;
+          default:
+            out.last.price += ' ${work['status']['currency']}';
+            break;
+        }
+        out.last.image =
+            '${work['media']['data']['version']}.${work['media']['media_id']}.${work['media']['data']['ext']}';
+
+        // TODO: Open artwork page and scrap additional data (technique)
       }
-    }
 
-    // Get artwork image links
-    List<DOM.Element> imageElements =
-        document.querySelectorAll('img.c_set_work');
-    for (var link in imageElements) {
-      out.add(Artwork());
-      out[out.length - 1].image =
-          link.attributes['src'].split('work/')[1].replaceAll('/', '.');
-    }
-
-    for (var link = 0; link < infoLinks.length; link++) {
-      response = await client.get(infoLinks[link]);
-      document = parse(response.body);
-      try {
-        out[link].name = document
-            .querySelector('h1#id_work_name')
-            .text
-            .split('/')[0]
-            .replaceAll('"', '');
-      } catch (igonre) {}
-      try {
-        out[link].price = document.querySelector('div.item-cost').text;
-      } catch (igonre) {}
-      var data =
-          document.querySelectorAll('div.artwork-option__description > p');
-      try {
-        out[link].size = data[6].text.replaceAll('Размер: ', '');
-      } catch (igonre) {}
-      try {
-        out[link].technique = data[3].text.replaceAll('Техника: ', '');
-      } catch (igonre) {}
-    }
+      total = data['total'];
+      parsed += data['works'].length;
+      page++;
+    } while (parsed < total);
 
     artworks = out;
     updateInProgress = false;
@@ -357,7 +351,7 @@ class _CatalogState extends State<Catalog> {
                     itemBuilder: (context, index) {
                       final item = dispalyingList[index];
                       return ListTile(
-                        title: Text(item.name),
+                        title: Text(item.name.split('/')[0].replaceAll('"', '')),
                         subtitle: Text(item.price),
                         leading: Container(
                           constraints: BoxConstraints(
