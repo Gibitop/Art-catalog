@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:html/parser.dart';
-import 'package:html/dom.dart' as DOM;
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
@@ -186,13 +185,19 @@ class _CatalogState extends State<Catalog> {
         out.last.image =
             '${work['media']['data']['version']}.${work['media']['media_id']}.${work['media']['data']['ext']}';
 
-        // TODO: Open artwork page and scrap additional data (technique)
+        out.last.creationDate = '${work['media']['create_date_format']['dt']}';
+        out.last.description = '${work['description']}';
+
+        out.last.workID = '${work['work_id']}';
+        out.last.lazyLoading = true;
       }
 
       total = data['total'];
       parsed += data['works'].length;
       page++;
     } while (parsed < total);
+
+    pageScrap();
 
     artworks = out;
     updateInProgress = false;
@@ -205,6 +210,26 @@ class _CatalogState extends State<Catalog> {
       });
       justifyImages();
     });
+  }
+
+  Future<void> pageScrap() async {
+    var client = Client();
+    for (var artwork = 0; artwork < artworks.length; artwork++) {
+      var response = await client.get(
+          'https://artchive.ru/artists/$id/works/${artworks[artwork].workID}');
+      var document = parse(response.body);
+      var data =
+          document.querySelectorAll('div.artwork-option__description > p');
+
+      artworks[artwork].artForm = data[0].text.split(': ')[1];
+      artworks[artwork].subjects = data[1].text.split(': ')[1];
+      artworks[artwork].style = data[2].text.split(': ')[1];
+      artworks[artwork].technique = data[3].text.split(': ')[1];
+      artworks[artwork].materials = data[4].text.split(': ')[1];
+
+      print('Finished lazy loading on ${artworks[artwork].name}');
+      artworks[artwork].lazyLoading = false;
+    }
   }
 
   Future<void> read() async {
@@ -351,7 +376,8 @@ class _CatalogState extends State<Catalog> {
                     itemBuilder: (context, index) {
                       final item = dispalyingList[index];
                       return ListTile(
-                        title: Text(item.name.split('/')[0].replaceAll('"', '')),
+                        title:
+                            Text(item.name.split('/')[0].replaceAll('"', '')),
                         subtitle: Text(item.price),
                         leading: Container(
                           constraints: BoxConstraints(
