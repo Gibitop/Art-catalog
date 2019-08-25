@@ -1,15 +1,18 @@
 General:
-    - Artwork page redesign
+    Artwork page:
+        - Convert to a statefull widget
+        - Update state on lazy loading finished
+        - Add description
+    
     - More fields for an artwork
     - ID page design
     - Get rid of a help page, move it's contents to ID page
 
 Bugs:
     - No internet throws an exception
-    - Artwork page can go lower than the screen
+    - Sometimes titles don't crop correctly
 
 Features:
     - Force update (restart the function)
-    - Take URLs instead of IDs
     - If there was no internet connection, try reconnecting every minute in a background
-    - Get more data trough API
+    - (?) Take URLs instead of IDs
