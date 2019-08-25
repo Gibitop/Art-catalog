@@ -14,7 +14,19 @@ class Product extends StatelessWidget {
       @required this.title,
       @required this.artwork,
       @required this.image})
-      : super(key: key);
+      : super(key: key) {
+        if (artwork.lazyLoading) {
+          lazyCheck();
+        }
+      }
+
+  Future<void> lazyCheck() async {
+    while(!artwork.lazyLoading) {
+      await Future.delayed(Duration(seconds: 1));
+    } 
+    // TODO: update state
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -67,7 +79,7 @@ class Product extends StatelessWidget {
                     children: <TableRow>[
                       TableRow(children: <Widget>[
                         Text(
-                          'Size:',
+                          'Size',
                           style: Theme.of(context).textTheme.body2,
                         ),
                         Text(
@@ -75,17 +87,72 @@ class Product extends StatelessWidget {
                           style: Theme.of(context).textTheme.body1,
                         )
                       ]),
+
                       TableRow(children: <Widget>[
                         Text(
-                          'Technique:',
+                          'Technique',
                           style: Theme.of(context).textTheme.body2,
                         ),
                         Text(
-                          artwork.technique,
+                          artwork.lazyLoading ? 'Loading...' : artwork.technique,
                           style: Theme.of(context).textTheme.body1,
                         )
                       ]),
-                      // TODO: Add other fields
+
+                      TableRow(children: <Widget>[
+                        Text(
+                          'Materials',
+                          style: Theme.of(context).textTheme.body2,
+                        ),
+                        Text(
+                          artwork.lazyLoading ? 'Loading...' : artwork.materials,
+                          style: Theme.of(context).textTheme.body1,
+                        )
+                      ]),
+
+                      TableRow(children: <Widget>[
+                        Text(
+                          'Style',
+                          style: Theme.of(context).textTheme.body2,
+                        ),
+                        Text(
+                          artwork.lazyLoading ? 'Loading...' : artwork.style,
+                          style: Theme.of(context).textTheme.body1,
+                        )
+                      ]),
+
+                      TableRow(children: <Widget>[
+                        Text(
+                          'Art form',
+                          style: Theme.of(context).textTheme.body2,
+                        ),
+                        Text(
+                          artwork.lazyLoading ? 'Loading...' : artwork.artForm,
+                          style: Theme.of(context).textTheme.body1,
+                        )
+                      ]),
+
+                      TableRow(children: <Widget>[
+                        Text(
+                          'Subject and objects',
+                          style: Theme.of(context).textTheme.body2,
+                        ),
+                        Text(
+                          artwork.lazyLoading ? 'Loading...' : artwork.subjects,
+                          style: Theme.of(context).textTheme.body1,
+                        )
+                      ]),
+
+                      TableRow(children: <Widget>[
+                        Text(
+                          'Date of creation',
+                          style: Theme.of(context).textTheme.body2,
+                        ),
+                        Text(
+                          artwork.creationDate,
+                          style: Theme.of(context).textTheme.body1,
+                        )
+                      ]),
                     ],
                   ),
                   // TODO: Add an artwork description
